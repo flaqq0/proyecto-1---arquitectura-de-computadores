@@ -20,22 +20,22 @@ Deben diseñar, implementar y verificar una Unidad Aritmético-Lógica (ALU) con
 
 4. Interfaz y especificación funcional
   * Entradas principales:
-    o op_a[31:0], op_b[31:0] — operandos (IEEE-754, single o half)
-    o op_code[2:0] — selecciona la operación (ADD, SUB, MUL, DIV)
-    o mode_fp — bit que selecciona el formato: 0 = half (16 bits), 1 = single (32 bits)
-    o clk, rst — señales de control
-    o round_mode — modo de redondeo (mínimo: nearest)
-    o start — activa el inicio de la operación
+    - op_a[31:0], op_b[31:0] — operandos (IEEE-754, single o half)
+    - op_code[2:0] — selecciona la operación (ADD, SUB, MUL, DIV)
+    - mode_fp — bit que selecciona el formato: 0 = half (16 bits), 1 = single (32 bits)
+    - clk, rst — señales de control
+    - round_mode — modo de redondeo (mínimo: nearest)
+    - start — activa el inicio de la operación
   * Salidas principales:
-  o result[31:0] — resultado en formato IEEE-754 (si mode_fp = 0, el resultado válido está en los 16 bits menos significativos)
-  o valid_out — señal que indica que el resultado ya está disponible y estable. Permite sincronizar el uso de la salida en sistemas secuenciales o pipelined.
-  o flags[4:0]
+    - result[31:0] — resultado en formato IEEE-754 (si mode_fp = 0, el resultado válido está en los 16 bits menos significativos)
+    - valid_out — señal que indica que el resultado ya está disponible y estable. Permite sincronizar el uso de la salida en sistemas secuenciales o pipelined.
+    - flags[4:0]
 
 5. Verificación
   * Deben incluir testbenches que cubran:
-    o Valores aleatorios comparados con referencia.
-    o Casos límite explícitos: NaN, ±Inf, ±0, denormales, overflow/underflow.
-    o Propiedades básicas como conmutatividad en suma y multiplicación.
+    - Valores aleatorios comparados con referencia.
+    - Casos límite explícitos: NaN, ±Inf, ±0, denormales, overflow/underflow.
+    - Propiedades básicas como conmutatividad en suma y multiplicación.
   * Reporte con estadísticas: número de vectores probados, casos fallidos con traza.
 
 6. Entregables
