@@ -39,8 +39,8 @@ Deben diseñar, implementar y verificar una Unidad Aritmético-Lógica (ALU) con
   * Reporte con estadísticas: número de vectores probados, casos fallidos con traza.
 
 6. Entregables
-  1. Código fuente HDL (estructurado y comentado).
-  2. Testbenches con los casos de prueba descritos.
-  3. XDC y archivos de proyecto para la Basys3.
-  4. Informe técnico (PDF) (min. 10 páginas + anexos): diseño, diagramas, metodología de verificación, resultados en simulación y pruebas en hardware.
-  5. Video presentación (8–12 min) explicación de su diseño, mostrando la simulación y la ejecución en la Basys3.
+  6.1. Código fuente HDL (estructurado y comentado).
+  6.2. Testbenches con los casos de prueba descritos.
+  6.3. XDC y archivos de proyecto para la Basys3.
+  6.4. Informe técnico (PDF) (min. 10 páginas + anexos): diseño, diagramas, metodología de verificación, resultados en simulación y pruebas en hardware.
+  6.5. Video presentación (8–12 min) explicación de su diseño, mostrando la simulación y la ejecución en la Basys3.
