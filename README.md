@@ -1,9 +1,9 @@
 # proyecto-1---arquitectura-de-computadores
 Diseño e implementación de una ALU capaz de resolver operaciones en punto flotante (IEEE-754, 32 bits y 16 bits) en FPGA Basys3
 1. Resumen
-Deben diseñar, implementar y verificar una Unidad Aritmético-Lógica (ALU) con soporte para números en punto flotante conforme al estándar IEEE-754 (single precision, 32 bits y half precision, 16 bits). El proyecto exige la ejecución correcta de operaciones aritméticas básicas y el manejo de los casos especiales definidos por el estándar (NaN, ±Inf, denormales, distintos modos de redondeo y excepciones).
+   Deben diseñar, implementar y verificar una Unidad Aritmético-Lógica (ALU) con soporte para números en punto flotante conforme al estándar IEEE-754 (single precision, 32 bits y half precision, 16 bits). El proyecto exige la ejecución correcta de operaciones aritméticas básicas y el manejo de los casos especiales definidos por el estándar (NaN, ±Inf, denormales, distintos modos de redondeo y excepciones).
 
-2. Objetivos generales
+3. Objetivos generales
 * Diseñar una ALU en HDL (Verilog o VHDL) que implemente operaciones aritméticas en punto flotante de 32 y 16 bits.
 * Verificar la funcionalidad mediante testbenches y vectores de prueba.
 * Implementar el diseño en la placa Basys3 y demostrar su funcionamiento.
