@@ -1,5 +1,6 @@
 # proyecto-1---arquitectura-de-computadores
-[Mi humilde suma 16 bits](https://www.edaplayground.com/x/Rsiz)
+[voy a continuar aquí para no malograr lo tuyo (partiré de tu base)](https://www.edaplayground.com/x/Rsiz)
+
 [Aquí estoy avanzando el código xd](https://www.edaplayground.com/x/rVL8)
 
 Diseño e implementación de una ALU capaz de resolver operaciones en punto flotante (IEEE-754, 32 bits y 16 bits) en FPGA Basys3
