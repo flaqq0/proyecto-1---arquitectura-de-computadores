@@ -20,7 +20,7 @@ module fadd(op_a, op_b, round_mode, result);
   wire b_zero = (e_b == 0) && (m_b == 0);
   
   reg [31:0] temp;
-  reg f_special;
+  reg f_special; //flag casos especiales
   
   localparam NaN = 32'h7FC00000;
   
@@ -49,7 +49,7 @@ module fadd(op_a, op_b, round_mode, result);
   // bit implicito de la mantisa
   //si e != 0, el bit implícito es 1; si e == 0, es 0.
   // se le agrega 3 bits de guarda G, R, S
-  reg [27:0] f_a, f_b; 
+  reg [26:0] f_a, f_b; 
   always @(*) begin
     f_a = (e_a == 0) ? {1'b0, m_a, 3'b000} : {1'b1, m_a, 3'b000};
     f_b = (e_b == 0) ? {1'b0, m_b, 3'b000} : {1'b1, m_b, 3'b000};
@@ -57,23 +57,49 @@ module fadd(op_a, op_b, round_mode, result);
   
   
   //alinear exponente y mantisas
-  reg [27:0] sh_a, sh_b; //mantisas shifteadas
+  reg [26:0] sh_a, sh_b; //mantisas shifteadas
   reg [7:0] exp; //exponente alineado
+  reg [5:0] shift; // hasta 27
+  reg [26:0] tmp_shifted;
+  reg [26:0] tmp_src;
+  reg [26:0] mask; // helper
+  reg sticky_b, sticky_a;
   always @(*) begin
-    if(e_a > e_b)begin
+    sticky_a = 1'b0; sticky_b = 1'b0;
+    if (e_a >= e_b) begin
       exp = e_a;
-      if (e_a - e_b < 28) begin //prevenir overflow al shiftear
-        sh_b = f_b >> (e_a - e_b); 
+      shift = e_a - e_b;
+      tmp_src = f_b;
+      if (shift >= 27) begin
         sh_a = f_a;
+        // all bits of f_b lost -> sticky = OR of all bits
+        sh_b = 27'b0;
+        sticky_b = |f_b;
+      end else begin
+        // normal shift right with sticky: dropped = f_b & ((1<<shift)-1)
+        tmp_shifted = f_b >> shift;
+        // create mask = (1<<shift)-1 (width 27)
+        mask = (27'b1 << shift) - 27'b1;
+        sticky_b = |(f_b & mask);
+        // OR sticky into least significant bit of shifted to preserve
+        sh_a = f_a;
+        sh_b = tmp_shifted | {26'b0, sticky_b};
       end
-      else begin sh_b = 0; sh_a = f_a; end //diferencia es muy grande, o sea b es esencialmente cero
     end else begin
       exp = e_b;
-      if (e_a - e_b < 28) begin
-        sh_a = f_a >> (e_b - e_a); 
+      shift = e_b - e_a;
+      tmp_src = f_a;
+      if (shift >= 27) begin
         sh_b = f_b;
-      end 
-      else begin sh_a = 0; sh_b = f_b;end
+        sh_a = 27'b0;
+        sticky_a = |f_a;
+      end else begin
+        tmp_shifted = f_a >> shift;
+        mask = (27'b1 << shift) - 27'b1;
+        sticky_a = |(f_a & mask);
+        sh_b = f_b;
+        sh_a = tmp_shifted | {26'b0, sticky_a};
+      end
     end
   end
 
@@ -81,7 +107,7 @@ module fadd(op_a, op_b, round_mode, result);
   
   
   reg s_f; //signo final
-  reg [28:0] man; //mantiza
+  reg [27:0] man; //mantiza
   
   always @ (*) begin
     if (s_a == s_b) begin
@@ -116,39 +142,40 @@ module fadd(op_a, op_b, round_mode, result);
   */
   
   
-  //redondeo (round to nearest even)
-  reg [27:0] n_m; //mantiza normalizada
+ 
+  reg [26:0] n_m; //mantiza normalizada
   reg [7:0] n_e; // exponente normalizado
-  reg [4:0] s_c; //contador shift, max 27 
  
   //normalización 1
   always @(*) begin
-    n_m = man[27:0];
+    n_m = man[26:0];
     n_e = exp;
-
-    if (man[28]) begin //overflow, se shiftea a la derecha y se incrementa 1 al exponente
-      n_m = man[28:1];
+    if (man[27]) begin // overflow
+      n_m = man[27:1]; 
       n_e = exp + 1;
     end else begin
-      while (n_m[27] == 0 && n_e > 0) begin
+      // shift left until MSB becomes 1 or exponent hits 0
+      // use while (ok for simulation). For synthesis replace with LZD.
+      while ((n_m[26] == 0) && (n_e > 0)) begin
         n_m = n_m << 1;
         n_e = n_e - 1;
       end
     end
   end
 
+
  
   //redondeo
-  reg [27:0] r_m; //mantisa redondeada
+  reg [23:0] r_m; //mantisa redondeada
   reg [7:0] f_e; //exponente final
   reg g, r, s;
   
   always @(*) begin
     g = n_m[2];
     r = n_m[1];
-    s = |n_m[0];
-    
-    r_m = n_m[27:3]; //mantiza sin grs
+    s = n_m[0];
+   
+    r_m = n_m[26:3]; //mantiza sin grs
     f_e = n_e;
     
     
@@ -198,3 +225,5 @@ IEEE punto flotante
   assign neg = result[31]; //resultado negativo o no
   assign zero = (result == 32'b0); //si resultado es 0
 */ 
+
+

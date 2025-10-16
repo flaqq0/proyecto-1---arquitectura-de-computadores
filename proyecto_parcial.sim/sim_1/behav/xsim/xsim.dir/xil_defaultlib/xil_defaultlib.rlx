@@ -3,5 +3,7 @@
 May 22 2025
 00:13:55
 C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto_parcial/proyecto_parcial.sim/sim_1/behav/xsim/glbl.v,1741209010,verilog,,,,glbl,,,,,,,,
-,,,,,,tb_fadd,,,,,,,,
-C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto_parcial/proyecto_parcial.srcs/sources_1/new/fadd.v,1760564697,verilog,,C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto_parcial/proyecto_parcial.srcs/sim_1/new/tb_fadd.v,,fadd,,,../../../../../../../../../../../Xilinx/2025.1/Vivado/data/rsb/busdef,,,,,
+C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto_parcial/proyecto_parcial.srcs/sim_1/new/tb_fadd.v,1760575876,verilog,,C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto_parcial/proyecto_parcial.srcs/sources_1/new/fadd.v,,tb_fadd,,,../../../../../../../../../../../Xilinx/2025.1/Vivado/data/rsb/busdef,,,,,
+C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto_parcial/proyecto_parcial.srcs/sim_1/new/tb_fsub.v,1760576204,verilog,,,,tb_fsub,,,../../../../../../../../../../../Xilinx/2025.1/Vivado/data/rsb/busdef,,,,,
+C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto_parcial/proyecto_parcial.srcs/sources_1/new/fadd.v,1760575754,verilog,,C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto_parcial/proyecto_parcial.srcs/sources_1/new/fsub.v,,fadd,,,../../../../../../../../../../../Xilinx/2025.1/Vivado/data/rsb/busdef,,,,,
+C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto_parcial/proyecto_parcial.srcs/sources_1/new/fsub.v,1760576005,verilog,,C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto_parcial/proyecto_parcial.srcs/sim_1/new/tb_fsub.v,,fsub,,,../../../../../../../../../../../Xilinx/2025.1/Vivado/data/rsb/busdef,,,,,
