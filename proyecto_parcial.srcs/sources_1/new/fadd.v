@@ -1,4 +1,4 @@
-`timescale 1ns/1ps
+`timescale 1ns/1ns
 module fadd(op_a, op_b, round_mode, result);
   input round_mode;
   input [31:0] op_a, op_b;
@@ -166,7 +166,7 @@ module fadd(op_a, op_b, round_mode, result);
 
  
   //redondeo
-  reg [23:0] r_m; //mantisa redondeada
+  reg [24:0] r_m; //mantisa redondeada
   reg [7:0] f_e; //exponente final
   reg g, r, s;
   
@@ -175,7 +175,7 @@ module fadd(op_a, op_b, round_mode, result);
     r = n_m[1];
     s = n_m[0];
    
-    r_m = n_m[26:3]; //mantiza sin grs
+    r_m = {1'b0,n_m[26:3]}; //mantiza sin grs
     f_e = n_e;
     
     
@@ -225,5 +225,4 @@ IEEE punto flotante
   assign neg = result[31]; //resultado negativo o no
   assign zero = (result == 32'b0); //si resultado es 0
 */ 
-
 
