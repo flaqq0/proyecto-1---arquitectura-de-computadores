@@ -1,4 +1,3 @@
-`timescale 1ns/1ps
 module fadd(op_a, op_b, round_mode, result);
   input round_mode;
   input [31:0] op_a, op_b;
@@ -70,18 +69,14 @@ module fadd(op_a, op_b, round_mode, result);
       exp = e_a;
       shift = e_a - e_b;
       tmp_src = f_b;
-      if (shift >= 27) begin
+      if (shift >= 27) begin // todos los bits de b se perdieron
         sh_a = f_a;
-        // all bits of f_b lost -> sticky = OR of all bits
         sh_b = 27'b0;
         sticky_b = |f_b;
       end else begin
-        // normal shift right with sticky: dropped = f_b & ((1<<shift)-1)
         tmp_shifted = f_b >> shift;
-        // create mask = (1<<shift)-1 (width 27)
-        mask = (27'b1 << shift) - 27'b1;
-        sticky_b = |(f_b & mask);
-        // OR sticky into least significant bit of shifted to preserve
+        mask = (27'b1 << shift) - 27'b1; //crea una mascara para obtener los bits que se descartarian al shiftear
+        sticky_b = |(f_b & mask); // OR sticky into lsb of shifted to preserve
         sh_a = f_a;
         sh_b = tmp_shifted | {26'b0, sticky_b};
       end
@@ -145,23 +140,45 @@ module fadd(op_a, op_b, round_mode, result);
  
   reg [26:0] n_m; //mantiza normalizada
   reg [7:0] n_e; // exponente normalizado
+  integer i; //iterador
+  reg found; //flag
+  reg [4:0] lz; //left zeros a shiftear
  
-  //normalización 1
+  // normalización 1
   always @(*) begin
     n_m = man[26:0];
     n_e = exp;
     if (man[27]) begin // overflow
-      n_m = man[27:1]; 
+      n_m = man[27:1];
       n_e = exp + 1;
     end else begin
-      // shift left until MSB becomes 1 or exponent hits 0
-      // use while (ok for simulation). For synthesis replace with LZD.
-      while ((n_m[26] == 0) && (n_e > 0)) begin
-        n_m = n_m << 1;
-        n_e = n_e - 1;
+      // si n_m es cero, dejar como cero
+      if (n_m == 27'b0) begin
+        n_m = 27'b0;
+        n_e = 8'd0;
+      end else begin
+        // Leading Zero Detect (LZD) basicamente ver si n_m[26] es 1, sino se shiftea hasta encontrarlo
+        found = 1'b0;
+        lz = 5'd0;
+        for (i = 0; i < 27; i = i + 1) begin
+          if (!found && n_m[26 - i]) begin
+            found = 1'b1;
+            lz = i[4:0];
+          end
+        end
+        if (found) begin
+          if (n_e > lz) begin
+            n_m = n_m << lz;
+            n_e = n_e - lz;
+          end else begin // en caso no encontrar 1 se vuelve denormal (exponente llega a 0)
+            n_m = n_m << n_e;
+            n_e = 8'd0;
+          end
+        end
       end
     end
   end
+
 
 
  

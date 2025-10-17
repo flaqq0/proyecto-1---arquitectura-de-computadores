@@ -28,8 +28,8 @@ module tb_fadd();
     
     //4.5 (0x40900000) + 0.249999 (0xh3E7FFFFF) 
     a = 32'h40900000; b = 32'h3E7FFFFF;
-     round_mode = 1; #10 //4.75
-     round_mode = 0; #10 //4.7499995
+     round_mode = 1; #10 //4.75 (0x40980000)
+     round_mode = 0; #10 //4.7499995 (0x4097ffff)
 
     $finish;
   end
