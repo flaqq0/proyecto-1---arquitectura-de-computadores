@@ -1,5 +1,5 @@
 `timescale 1ns/1ns
-module tb();
+module tb_fmul();
   reg [31:0] op_a, op_b;
   reg mode_fp, round_mode;
   wire [31:0] result;

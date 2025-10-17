@@ -1,16 +1,26 @@
 `timescale 1ns/1ps
-module fdiv(op_a, op_b, round_mode, result);
-  input round_mode;
+module fdiv(op_a, op_b, round_mode, mode_fp, result, valid_out);
+  input round_mode, mode_fp;
   input [31:0] op_a, op_b;
   output reg [31:0] result;
+  output reg valid_out;
+  
+  wire [31:0] op_a_conv, op_b_conv;
+  wire [31:0] conv_a_out, conv_b_out;
 
-  // unpack los bits
-  wire s_a, s_b;
-  wire [22:0] m_a, m_b;
+  fp16_32 conv_a(.in16(op_a[15:0]), .out32(conv_a_out));
+  fp16_32 conv_b(.in16(op_b[15:0]), .out32(conv_b_out));
+
+  assign op_a_conv = mode_fp ? op_a : conv_a_out;
+  assign op_b_conv = mode_fp ? op_b : conv_b_out;
+  
+  //unpack los 32 bits
+  wire s_a, s_b; 
+  wire [22:0] m_a, m_b; 
   wire [7:0] e_a, e_b;
-  assign s_a = op_a[31]; assign e_a = op_a[30:23]; assign m_a = op_a [22:0];
-  assign s_b = op_b[31]; assign e_b = op_b[30:23]; assign m_b = op_b [22:0];
-
+  assign s_a = op_a_conv[31]; assign e_a = op_a_conv[30:23]; assign m_a = op_a_conv[22:0];
+  assign s_b = op_b_conv[31]; assign e_b = op_b_conv[30:23]; assign m_b = op_b_conv[22:0];
+  
   // flags casos especiales
   wire a_inf = (e_a == 8'hFF) && (m_a == 0);
   wire b_inf = (e_b == 8'hFF) && (m_b == 0);
@@ -80,7 +90,6 @@ module fdiv(op_a, op_b, round_mode, result);
       if (found) begin
         shift = lz + 1; // para mover el 1 a la posición 26 se necesita desplazar lz + 1
         n_m = (c[25:0] << shift);
-        // ahora n_m tiene la forma [26:0]
         if (exp > shift)
           n_e = exp - shift;
         else
@@ -92,23 +101,21 @@ module fdiv(op_a, op_b, round_mode, result);
     end
   end
 
-  // rounding: tomar G,R,S = n_m[2], n_m[1], n_m[0]
+  // redondeo
   reg [24:0] r_m; // 25 bits para detectar carry en +1
-  reg gbit, rbit, sbit;
+  reg g, r, s;
   reg [7:0] f_e;
   always @(*) begin
-    gbit = n_m[2];
-    rbit = n_m[1];
-    sbit = n_m[0]; // ya es bit único por nuestra construcción
-    // r_m[23:0] serán los 24 bits (1 + 23 fraction) desplazados, r_m[24] es bit extra
-    r_m = {1'b0, n_m[26:3]}; // extraemos mantisa (bits 26..3) -> 24 bits, dejar msb extra en [24]
+    g = n_m[2];
+    r = n_m[1];
+    s = n_m[0]; 
+    
+    r_m = {1'b0, n_m[26:3]};
     f_e = n_e;
     if (round_mode) begin
-      // round to nearest even
-      if ((gbit && (rbit || sbit)) || (gbit && !rbit && !sbit && r_m[0])) begin
+      if ((g && (r || s)) || (g && !r && !s && r_m[0])) begin
         r_m = r_m + 1;
         if (r_m[24]) begin
-          // carry produjo 1.xxx overflow -> shift right y ajustar exponent
           r_m = r_m >> 1;
           f_e = f_e + 1;
         end
@@ -118,18 +125,14 @@ module fdiv(op_a, op_b, round_mode, result);
 
   // packing final y manejo post-checks
   always @(*) begin
+    valid_out = 0;
+    result = 32'b0;
     if (f_special) begin
-      // casos especiales ya resueltos (prioritarios)
-      if (a_nan || b_nan) result = NaN;
-      else if (a_inf && b_inf) result = NaN;
-      else if (a_inf) result = {s_a ^ s_b, 8'hFF, 23'b0};
-      else if (b_inf) result = {s_a ^ s_b, 8'h00, 23'b0};
-      else if (a_zero && b_zero) result = NaN;
-      else if (a_zero) result = {s_a ^ s_b, 8'h00, 23'b0};
-      else if (b_zero) result = {s_a ^ s_b, 8'hFF, 23'b0}; // div by zero -> inf
-      else result = temp;
+      valid_out = 1;
+      result = temp;
     end else begin
-      // overflow exponent -> inf
+      valid_out = 1;
+      // overflow exponente inf
       if (f_e >= 8'hFF) result = {s_a ^ s_b, 8'hFF, 23'b0};
       else result = {s_a ^ s_b, f_e, r_m[22:0]};
     end

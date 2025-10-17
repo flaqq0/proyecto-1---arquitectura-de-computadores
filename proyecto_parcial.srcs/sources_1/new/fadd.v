@@ -1,14 +1,24 @@
-module fadd(op_a, op_b, round_mode, result);
-  input round_mode;
+module fadd(op_a, op_b, round_mode, mode_fp, result, valid_out);
+  input round_mode, mode_fp;
   input [31:0] op_a, op_b;
   output reg [31:0] result;
+  output reg valid_out;
   
-  //unpack los bits
+  wire [31:0] op_a_conv, op_b_conv;
+  wire [31:0] conv_a_out, conv_b_out;
+
+  fp16_32 conv_a(.in16(op_a[15:0]), .out32(conv_a_out));
+  fp16_32 conv_b(.in16(op_b[15:0]), .out32(conv_b_out));
+
+  assign op_a_conv = mode_fp ? op_a : conv_a_out;
+  assign op_b_conv = mode_fp ? op_b : conv_b_out;
+
+  //unpack los 32 bits
   wire s_a, s_b; 
   wire [22:0] m_a, m_b; 
   wire [7:0] e_a, e_b;
-  assign s_a = op_a[31]; assign e_a = op_a[30:23]; assign m_a = op_a [22:0];
-  assign s_b = op_b[31]; assign e_b = op_b[30:23]; assign m_b = op_b [22:0];
+  assign s_a = op_a_conv[31]; assign e_a = op_a_conv[30:23]; assign m_a = op_a_conv[22:0];
+  assign s_b = op_b_conv[31]; assign e_b = op_b_conv[30:23]; assign m_b = op_b_conv[22:0];
   
   //flags para identificar casos especiales
   wire a_inf = (e_a == 8'hFF) && (m_a == 0);
@@ -210,13 +220,16 @@ module fadd(op_a, op_b, round_mode, result);
   end
   
   
+  
   always @(*) begin
-    if (f_special) result = temp;
-    else result = {s_f, f_e, r_m[22:0]};
+    valid_out = 0;
+    result = 32'b0;
+    if (f_special) begin  result = temp; valid_out = 1;end
+    else begin result = {s_f, f_e, r_m[22:0]}; valid_out = 1;end
   end
 endmodule
 
-      
+
 /*
 IEEE punto flotante
 	[31][30:23][22:0] -> signo (s) - exponente (e) - mantisa (m)
