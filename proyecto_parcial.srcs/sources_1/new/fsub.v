@@ -1,4 +1,4 @@
-`timescale 1ns/1ns
+`timescale 1ns/1ps
 module fsub(op_a, op_b, round_mode, result);
   input [31:0] op_a, op_b;
   input round_mode;

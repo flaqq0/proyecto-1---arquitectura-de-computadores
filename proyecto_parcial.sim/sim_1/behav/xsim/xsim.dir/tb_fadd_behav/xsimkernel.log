@@ -1,7 +1,7 @@
-Running: xsim.dir/tb_fadd_behav/xsimk.exe -simmode gui -wdb tb_fadd_behav.wdb -simrunnum 0 -socket 55224
+Running: xsim.dir/tb_fadd_behav/xsimk.exe -simmode gui -wdb tb_fadd_behav.wdb -simrunnum 0 -socket 61321
 Design successfully loaded
-Design Loading Memory Usage: 10756 KB (Peak: 10756 KB)
-Design Loading CPU Usage: 15 ms
+Design Loading Memory Usage: 10752 KB (Peak: 10752 KB)
+Design Loading CPU Usage: 46 ms
 Simulation completed
-Simulation Memory Usage: 11488 KB (Peak: 11488 KB)
-Simulation CPU Usage: 61 ms
+Simulation Memory Usage: 11612 KB (Peak: 11612 KB)
+Simulation CPU Usage: 108 ms
