@@ -1,8 +1,9 @@
-module fadd(op_a, op_b, round_mode, mode_fp, result, valid_out);
-  input round_mode, mode_fp;
+`timescale 1ns / 1ps
+module fadd(op_a, op_b, round_mode, mode_fp, result, flags);
   input [31:0] op_a, op_b;
+  input round_mode, mode_fp;
   output reg [31:0] result;
-  output reg valid_out;
+  output reg [4:0] flags;
   
   wire [31:0] op_a_conv, op_b_conv;
   wire [31:0] conv_a_out, conv_b_out;
@@ -44,8 +45,8 @@ module fadd(op_a, op_b, round_mode, mode_fp, result, valid_out);
     else if (a_inf) temp = s_a ? 32'hFF800000 : 32'h7F800000;
     else if (b_inf) temp = s_b ? 32'hFF800000 : 32'h7F800000;
     else if (a_zero && b_zero) temp = 0;
-    else if (a_zero) temp = op_b;
-    else if (b_zero) temp = op_a;
+    else if (a_zero) temp = op_b_conv;
+    else if (b_zero) temp = op_a_conv;
     else begin
       temp = 0;
       f_special = 0;
@@ -219,14 +220,26 @@ module fadd(op_a, op_b, round_mode, mode_fp, result, valid_out);
     end
   end
   
-  
+  wire [15:0] result16;
+  fp32_16 conv_res(.in32({s_f, f_e, r_m[22:0]}), .out16(result16));
   
   always @(*) begin
-    valid_out = 0;
+    flags = 5'b0;
     result = 32'b0;
-    if (f_special) begin  result = temp; valid_out = 1;end
-    else begin result = {s_f, f_e, r_m[22:0]}; valid_out = 1;end
+    if (f_special) begin
+      result = temp;
+      if (temp == NaN) flags[4] = 1'b1; // invalid
+      else if (temp[30:23] == 8'hFF && temp[22:0] == 0) flags[3] = 1'b1; // overflow (inf)
+    end else begin
+      result = mode_fp ? {s_f, f_e, r_m[22:0]} : {16'b0, result16};
+      if (f_e == 8'hFF && r_m[22:0] == 0) flags[3] = 1'b1; // overflow
+      if (f_e == 8'h00 && r_m[22:0] != 0) flags[2] = 1'b1; // underflow
+      if (g || r || s) flags[0] = 1'b1; 
+    end
   end
+  
+  
+  
 endmodule
 
 

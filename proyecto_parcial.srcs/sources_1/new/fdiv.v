@@ -1,9 +1,9 @@
 `timescale 1ns/1ps
-module fdiv(op_a, op_b, round_mode, mode_fp, result, valid_out);
+module fdiv(op_a, op_b, round_mode, mode_fp, result,flags);
   input round_mode, mode_fp;
   input [31:0] op_a, op_b;
   output reg [31:0] result;
-  output reg valid_out;
+  output reg [4:0] flags;
   
   wire [31:0] op_a_conv, op_b_conv;
   wire [31:0] conv_a_out, conv_b_out;
@@ -40,7 +40,7 @@ module fdiv(op_a, op_b, round_mode, mode_fp, result, valid_out);
     else if (a_inf && b_inf) temp = NaN; // inf/inf = NaN
     else if (a_inf) temp = {s_a ^ s_b, 8'hFF, 23'b0}; // inf / finite = inf
     else if (b_inf) temp = {s_a ^ s_b, 8'h00, 23'b0}; // finite / inf = 0
-    else if (b_zero) temp = 32'h7F800000; // num / 0 = NaN
+    else if (b_zero) temp = NaN; // num / 0 = NaN
     else if (a_zero) temp = {s_a ^ s_b, 8'h00, 23'b0}; // 0 / num = 0
     else begin
       temp = 32'h0;
@@ -122,19 +122,24 @@ module fdiv(op_a, op_b, round_mode, mode_fp, result, valid_out);
       end
     end
   end
-
-  // packing final y manejo post-checks
+  
+  wire [15:0] result16;
+  fp32_16 conv_res(.in32({s_a ^ s_b, f_e, r_m[22:0]}), .out16(result16));
+  
+  
   always @(*) begin
-    valid_out = 0;
+    flags = 5'b0;
     result = 32'b0;
     if (f_special) begin
-      valid_out = 1;
       result = temp;
+      if (a_nan || b_nan || (a_inf && b_inf)) flags[4] = 1'b1; // invalid
+      else if (b_zero && !a_zero) flags[1] = 1'b1; // div_zero
+      else if (a_inf || b_inf) flags[3] = 1'b1; // overflow o inf result
     end else begin
-      valid_out = 1;
-      // overflow exponente inf
-      if (f_e >= 8'hFF) result = {s_a ^ s_b, 8'hFF, 23'b0};
-      else result = {s_a ^ s_b, f_e, r_m[22:0]};
+      result = mode_fp ? {s_a ^ s_b, f_e, r_m[22:0]} : {16'b0, result16};
+      if (f_e >= 8'hFF) begin flags[3] = 1'b1; result = {s_a ^ s_b, 8'hFF, 23'b0}; end // overflow
+      if (f_e == 8'h00 && r_m[22:0] != 0) flags[2] = 1'b1; // underflow
+      if (g || r || s) flags[0] = 1'b1; // inexact
     end
   end
 
