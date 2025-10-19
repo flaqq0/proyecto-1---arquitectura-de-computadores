@@ -86,7 +86,7 @@ module fmul(op_a, op_b, round_mode, mode_fp, result, flags);
   reg [7:0] n_e;
   reg [26:0] n_m; // 27 bits: 24 mantissa + grs
   reg sticky;
-  integer i;
+  integer i, shift_amt;
 
   always @(*) begin
     prod = f_a * f_b; 
@@ -105,19 +105,27 @@ module fmul(op_a, op_b, round_mode, mode_fp, result, flags);
       //  caso 1: prod[47] = 1  ent producto entre [2.0, 4.0) -> se toma de 47 al 21 (27 bits)  y el sticky es dle 20 al 0, exponente mas 1
       //  caso 2: prod[47] = 0 ent producto entre [1.0, 2.0) -> se toma del 46 al 20 (27 bits) y el sticky es del 19 al 0
 
-      if (prod[47]) begin
-        n_m = {prod[47], prod[46:21]}; 
-        sticky = |prod[20:0];
-        if (exp_sum + 1 > 255) n_e = 8'hFF; //overflow
-        else if (exp_sum + 1 < 0) n_e = 8'h00; //underflow
-        else n_e = exp_sum + 1;
-      end else begin
-        n_m = {prod[46], prod[45:20]};
-        sticky = |prod[19:0];
-        if (exp_sum > 255) n_e = 8'hFF;
-        else if (exp_sum < 0) n_e = 8'h00;
-        else n_e = exp_sum;
-      end
+        // CAMBIO DENORMAL
+        if (prod[47]) begin
+            n_m = {prod[47], prod[46:21]}; 
+            sticky = |prod[20:0];
+            if (exp_sum + 1 > 255) n_e = 8'hFF; //overflow
+            else if (exp_sum + 1 < 1) begin
+                // Denormalizar: shift mantisa a la derecha para ajustar exponente underfow
+                shift_amt = 1 - (exp_sum + 1);
+                if (shift_amt < 27) n_m = n_m >> shift_amt;
+                else n_m = 0;
+                n_e = 8'h00; // denormal exponente
+            end
+            else if (exp_sum + 1 < 0) n_e = 8'h00; //underflow
+            else n_e = exp_sum + 1;
+        end else begin
+            n_m = {prod[46], prod[45:20]};
+            sticky = |prod[19:0];
+            if (exp_sum > 255) n_e = 8'hFF;
+            else if (exp_sum < 0) n_e = 8'h00;
+            else n_e = exp_sum;
+        end
     end
   end
 
