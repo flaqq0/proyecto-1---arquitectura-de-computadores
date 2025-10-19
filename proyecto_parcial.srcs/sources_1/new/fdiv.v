@@ -30,22 +30,47 @@ module fdiv(op_a, op_b, round_mode, mode_fp, result,flags);
   wire b_zero = (e_b == 0) && (m_b == 0);
 
   reg [31:0] temp;
-  reg f_special; // flag casos especiales
+  reg f_special; //flag casos especiales
+  reg [4:0] e16;
+  reg [9:0] m16;
+  
   localparam NaN = 32'h7FC00000;
-
-  // resultado casos especiales
+  
+  //resultado casos especiales
   always @(*) begin
-    f_special = 1'b1;
+    f_special = 1;
     if (a_nan || b_nan) temp = NaN;
-    else if (a_inf && b_inf) temp = NaN; // inf/inf = NaN
-    else if (a_inf) temp = {s_a ^ s_b, 8'hFF, 23'b0}; // inf / finite = inf
-    else if (b_inf) temp = {s_a ^ s_b, 8'h00, 23'b0}; // finite / inf = 0
-    else if (b_zero) temp = NaN; // num / 0 = NaN
-    else if (a_zero) temp = {s_a ^ s_b, 8'h00, 23'b0}; // 0 / num = 0
-    else begin
-      temp = 32'h0;
-      f_special = 1'b0;
+    else if (a_inf && b_inf) begin 
+      if (s_a != s_b) temp = NaN; // inf - inf = NaN
+      else temp = s_a ? 32'hFF800000 : 32'h7F800000; //inf + inf = inf 
     end
+    else if (a_inf) temp = s_a ? 32'hFF800000 : 32'h7F800000;
+    else if (b_inf) temp = s_b ? 32'hFF800000 : 32'h7F800000;
+    else if (a_zero && b_zero) temp = 0;
+    else if (a_zero) temp = op_b_conv;
+    else if (b_zero) temp = op_a_conv;
+    else begin
+      temp = 0;
+      f_special = 0;
+    end
+    if (f_special && mode_fp == 1'b0) begin
+      case (temp[30:23])
+        8'hFF: begin
+          if (temp[22:0] == 0)
+            temp = {16'b0, {temp[31], 5'b11111, 10'b0}}; // inf
+          else
+            temp = {16'b0, {temp[31], 5'b11111, 10'b1000000000}}; // NaN
+        end
+        8'h00: begin
+          temp = {16'b0, {temp[31], 15'b0}}; // 0
+        end
+        default: begin
+          e16 = (temp[30:23] > 8'd112) ? (temp[30:23] - 8'd112) : 5'd0;
+          m16 = temp[22:13];
+          temp = {16'b0, {temp[31], e16, m16}};
+        end
+      endcase
+      end
   end
 
   // bit implicito de la mantisa(23 +1 bits)

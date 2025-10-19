@@ -31,6 +31,8 @@ module fadd(op_a, op_b, round_mode, mode_fp, result, flags);
   
   reg [31:0] temp;
   reg f_special; //flag casos especiales
+  reg [4:0] e16;
+  reg [9:0] m16;
   
   localparam NaN = 32'h7FC00000;
   
@@ -51,6 +53,24 @@ module fadd(op_a, op_b, round_mode, mode_fp, result, flags);
       temp = 0;
       f_special = 0;
     end
+    if (f_special && mode_fp == 1'b0) begin
+      case (temp[30:23])
+        8'hFF: begin
+          if (temp[22:0] == 0)
+            temp = {16'b0, {temp[31], 5'b11111, 10'b0}}; // inf
+          else
+            temp = {16'b0, {temp[31], 5'b11111, 10'b1000000000}}; // NaN
+        end
+        8'h00: begin
+          temp = {16'b0, {temp[31], 15'b0}}; // 0
+        end
+        default: begin
+          e16 = (temp[30:23] > 8'd112) ? (temp[30:23] - 8'd112) : 5'd0;
+          m16 = temp[22:13];
+          temp = {16'b0, {temp[31], e16, m16}};
+        end
+      endcase
+      end
   end
   
   

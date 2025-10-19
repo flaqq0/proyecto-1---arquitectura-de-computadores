@@ -9,13 +9,7 @@ module top(
 );
 
     // estados
-    localparam s0 = 3'd0,
-               s1 = 3'd1,
-               s2 = 3'd2,
-               s3 = 3'd3,
-               s4 = 3'd4,
-               s5= 3'd5,
-               s6= 3'd6;
+    localparam s0 = 3'd0, s1 = 3'd1, s2 = 3'd2, s3 = 3'd3, s4 = 3'd4, s5= 3'd5, s6= 3'd6;
 
     reg [2:0] state, next_state;
 

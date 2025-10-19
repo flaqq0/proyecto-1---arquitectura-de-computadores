@@ -1,0 +1,3 @@
+C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/random_numbers_generator/cmake-build-debug/CMakeFiles/random_numbers_generator.dir
+C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/random_numbers_generator/cmake-build-debug/CMakeFiles/edit_cache.dir
+C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/random_numbers_generator/cmake-build-debug/CMakeFiles/rebuild_cache.dir
