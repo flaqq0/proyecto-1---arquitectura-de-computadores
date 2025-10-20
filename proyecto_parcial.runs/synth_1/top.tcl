@@ -77,11 +77,11 @@ read_verilog -library xil_defaultlib {
   C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/proyecto_parcial.srcs/sources_1/new/fadd.v
   C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/proyecto_parcial.srcs/sources_1/new/falu.v
   C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/proyecto_parcial.srcs/sources_1/new/fdiv.v
-  C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/codigoMul/fmul.v
   C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/proyecto_parcial.srcs/sources_1/new/fp16_32.v
   C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/proyecto_parcial.srcs/sources_1/new/fp32_16.v
   C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/proyecto_parcial.srcs/sources_1/new/fsub.v
   C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/proyecto_parcial.srcs/sources_1/new/top.v
+  C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/proyecto_parcial.srcs/sources_1/new/fmul.v
 }
 OPTRACE "Adding files" END { }
 # Mark all dcp files as not used in implementation to prevent them from being
