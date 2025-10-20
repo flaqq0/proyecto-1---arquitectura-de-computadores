@@ -1,7 +1,7 @@
 Copyright 1986-2022 Xilinx, Inc. All Rights Reserved. Copyright 2022-2025 Advanced Micro Devices, Inc. All Rights Reserved.
 ---------------------------------------------------------------------------------------------------------------------------------------------
 | Tool Version : Vivado v.2025.1 (win64) Build 6140274 Thu May 22 00:12:29 MDT 2025
-| Date         : Sat Oct 18 16:11:50 2025
+| Date         : Sun Oct 19 18:56:41 2025
 | Host         : MSI running 64-bit major release  (build 9200)
 | Command      : report_control_sets -verbose -file top_control_sets_placed.rpt
 | Design       : top
@@ -60,10 +60,10 @@ Table of Contents
 +--------------+-----------------------+------------------------+-----------------+--------------+
 | No           | No                    | No                     |               5 |            2 |
 | No           | No                    | Yes                    |               0 |            0 |
-| No           | Yes                   | No                     |              17 |           10 |
+| No           | Yes                   | No                     |              17 |            6 |
 | Yes          | No                    | No                     |               0 |            0 |
 | Yes          | No                    | Yes                    |               0 |            0 |
-| Yes          | Yes                   | No                     |             114 |           82 |
+| Yes          | Yes                   | No                     |             114 |           62 |
 +--------------+-----------------------+------------------------+-----------------+--------------+
 
 
@@ -74,13 +74,13 @@ Table of Contents
 |  Clock Signal  | Enable Signal | Set/Reset Signal | Slice Load Count | Bel Load Count | Bels / Slice |
 +----------------+---------------+------------------+------------------+----------------+--------------+
 |  clk_IBUF_BUFG |               |                  |                2 |              5 |         2.50 |
-|  clk_IBUF_BUFG | op_code       | btnU_IBUF        |               13 |             13 |         1.00 |
-|  clk_IBUF_BUFG | op_b_32[7]    | btnU_IBUF        |                7 |             16 |         2.29 |
-|  clk_IBUF_BUFG | op_b_32[17]   | btnU_IBUF        |               11 |             16 |         1.45 |
-|  clk_IBUF_BUFG | op_a_32[17]   | btnU_IBUF        |               13 |             16 |         1.23 |
-|  clk_IBUF_BUFG | op_a_32[7]    | btnU_IBUF        |               11 |             16 |         1.45 |
-|  clk_IBUF_BUFG |               | btnU_IBUF        |               10 |             17 |         1.70 |
-|  clk_IBUF_BUFG | btnC_IBUF     | btnU_IBUF        |               27 |             37 |         1.37 |
+|  clk_IBUF_BUFG | op_code       | btnU_IBUF        |                7 |             13 |         1.86 |
+|  clk_IBUF_BUFG | op_b_32[7]    | btnU_IBUF        |                9 |             16 |         1.78 |
+|  clk_IBUF_BUFG | op_a_32[7]    | btnU_IBUF        |                7 |             16 |         2.29 |
+|  clk_IBUF_BUFG | op_b_32[17]   | btnU_IBUF        |                8 |             16 |         2.00 |
+|  clk_IBUF_BUFG | op_a_32[17]   | btnU_IBUF        |               11 |             16 |         1.45 |
+|  clk_IBUF_BUFG |               | btnU_IBUF        |                6 |             17 |         2.83 |
+|  clk_IBUF_BUFG | btnC_IBUF     | btnU_IBUF        |               20 |             37 |         1.85 |
 +----------------+---------------+------------------+------------------+----------------+--------------+
 
 

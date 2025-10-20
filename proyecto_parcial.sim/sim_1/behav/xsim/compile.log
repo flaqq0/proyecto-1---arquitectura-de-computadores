@@ -22,5 +22,9 @@ INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/sofia/Desktop/Documentos/2
 INFO: [VRFC 10-311] analyzing module tb_fsub
 INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/proyecto_parcial.srcs/sim_1/new/tb_fadd.v" into library xil_defaultlib
 INFO: [VRFC 10-311] analyzing module tb_fadd
-INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/codigoMul/fmul_tb.v" into library xil_defaultlib
-INFO: [VRFC 10-311] analyzing module tb
+INFO: [VRFC 10-2263] Analyzing Verilog file "C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/codigoMul/fmultb.v" into library xil_defaultlib
+INFO: [VRFC 10-311] analyzing module fp32_16
+WARNING: [VRFC 10-3609] overwriting previous definition of module 'fp32_16' [C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/codigoMul/fmultb.v:3]
+INFO: [VRFC 10-311] analyzing module fp16_32
+WARNING: [VRFC 10-3609] overwriting previous definition of module 'fp16_32' [C:/Users/sofia/Desktop/Documentos/2025/arqui/proyecto-1---arquitectura-de-computadores/codigoMul/fmultb.v:40]
+INFO: [VRFC 10-311] analyzing module tb_fmul

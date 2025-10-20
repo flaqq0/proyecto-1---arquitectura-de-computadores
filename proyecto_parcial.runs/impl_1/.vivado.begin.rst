@@ -1,30 +1,10 @@
 <?xml version="1.0"?>
 <ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="sofia" Host="MSI" Pid="10828" HostCore="8" HostMemory="016867569664">
+    <Process Command="vivado.bat" Owner="sofia" Host="MSI" Pid="2992" HostCore="8" HostMemory="016867569664">
     </Process>
 </ProcessHandle>
 <?xml version="1.0"?>
 <ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="sofia" Host="MSI" Pid="8544" HostCore="8" HostMemory="016867569664">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="sofia" Host="MSI" Pid="3896" HostCore="8" HostMemory="016867569664">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="sofia" Host="MSI" Pid="18932" HostCore="8" HostMemory="016867569664">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="sofia" Host="MSI" Pid="19336" HostCore="8" HostMemory="016867569664">
-    </Process>
-</ProcessHandle>
-<?xml version="1.0"?>
-<ProcessHandle Version="1" Minor="0">
-    <Process Command="vivado.bat" Owner="sofia" Host="MSI" Pid="16084" HostCore="8" HostMemory="016867569664">
+    <Process Command="vivado.bat" Owner="sofia" Host="MSI" Pid="25908" HostCore="8" HostMemory="016867569664">
     </Process>
 </ProcessHandle>

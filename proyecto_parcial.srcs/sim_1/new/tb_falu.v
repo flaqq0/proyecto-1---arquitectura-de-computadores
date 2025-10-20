@@ -92,11 +92,12 @@ module tb_falu();
         start = 1; op_code = 3'b010;
         op_a = 32'hFF800000; op_b = 32'hBF800000; #10
         op_a = 32'h00000000; op_b = 32'h00000000; #10
-        
+        */
         // 4.5e-44 (denormal) * 2 = 9e-44(0x00000040) -> 0x00000000 PARA ESTE NO ME FUNIONA AHHHHHHH
         start = 1; op_code = 3'b010;
         op_a = 32'h00000020; op_b = 32'h40000000; #10
         op_a = 32'h00000000; op_b = 32'h00000000; #10
+        /*
         
         // conmutatividad (a*b == b*a) -> 515.4794 (0x4400deae) * -723.0139 (0xc434c0e4) = 372698.771364 (0xc8b5fb58)
         start = 1; op_code = 3'b010;
@@ -125,7 +126,7 @@ module tb_falu();
         start = 1; op_code = 3'b011;
         op_a = 32'h00000001; op_b = 32'h7f7fffff; #10
         
-        // 0.00002 (0x37a7c5ac) / 5.381e-42 (0x00000f00) = 3.7167813e+36 (0x7c32f4de) ESTE TMPC FUNCIONA POR DENORMAL
+        // 0.00002 (0x37a7c5ac) / 5.381e-42 (0x00000f00) = NaN (0x7e00)
         start = 1; op_code = 3'b011;
         op_a = 32'h37a7c5ac; op_b = 32'h00000f00; #10
         
@@ -216,12 +217,12 @@ module tb_falu();
         start = 1; op_code = 2'b11;
         op_a = 32'h00003C00; op_b = 32'h00000000; #10;
         op_a = 32'h00000000; op_b = 32'h00000000; #10;
-        */
+
         //0.5 (0x3800) / 5.96e-8 (0x0004) = inf overflow
         start = 1; op_code = 2'b11;
         op_a = 32'h00003800; op_b = 32'h00000004; #10;
         op_a = 32'h00000000; op_b = 32'h00000000; #10;
-        /*
+        
          //0.0 (0x0000) / inf (0x7C00) = NaN (0x7E00)
         start = 1; op_code = 2'b11;
         op_a = 32'h00000000; op_b = 32'h00007C00; #10;

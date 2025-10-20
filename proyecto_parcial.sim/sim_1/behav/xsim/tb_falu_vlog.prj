@@ -12,7 +12,7 @@ verilog xil_defaultlib  --include "../../../../../../../../../../../Xilinx/2025.
 "../../../../proyecto_parcial.srcs/sim_1/new/tb_fdiv.v" \
 "../../../../proyecto_parcial.srcs/sim_1/new/tb_fsub.v" \
 "../../../../proyecto_parcial.srcs/sim_1/new/tb_fadd.v" \
-"../../../../codigoMul/fmul_tb.v" \
+"../../../../codigoMul/fmultb.v" \
 
 # compile glbl module
 verilog xil_defaultlib "glbl.v"
