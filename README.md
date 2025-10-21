@@ -1,5 +1,5 @@
 # proyecto-1---arquitectura-de-computadores
-**EL INFORME SE ENCUENTRA EN EL ARCHIVO "[INFORME P1 Arquitectura de Computadores.pdf](https://github.com/flaqq0/proyecto-1---arquitectura-de-computadores/blob/main/INFORME%20P1%20Arquitectura%20de%20Computadores.pdf)"**
+**EL INFORME SE ENCUENTRA EN EL ARCHIVO "[INFORME P1 Arquitectura de Computadores.pdf](https://github.com/flaqq0/proyecto-1---arquitectura-de-computadores/blob/main/0%20Arquitectura%20de%20Computadores_INFORME.pdf)"**
 
 **[LINK DEL VIDEO](https://www.canva.com/design/DAG2mGk-qWY/UPyxY6yAyecJNkPP-SweYw/view?utm_content=DAG2mGk-qWY&utm_campaign=designshare&utm_medium=link2&utm_source=uniquelinks&utlId=h6f22a30ab8)**
 
@@ -52,5 +52,5 @@ Diseño e implementación de una ALU capaz de resolver operaciones en punto flot
    6.3. XDC y archivos de proyecto para la Basys3.
 
    6.4. Informe técnico (PDF) (min. 10 páginas + anexos): diseño, diagramas, metodología de verificación, resultados en simulación y pruebas en hardware.
-   
+
    6.5. Video presentación (8–12 min) explicación de su diseño, mostrando la simulación y la ejecución en la Basys3.
