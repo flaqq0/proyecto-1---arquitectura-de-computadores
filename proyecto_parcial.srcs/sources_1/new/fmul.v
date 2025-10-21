@@ -29,6 +29,8 @@ module fmul(op_a, op_b, round_mode, mode_fp, result, flags);
   reg [31:0] temp;
   reg f_special, s_f;
   localparam NaN = 32'h7FC00000;
+  reg [4:0] e16; reg [9:0] m16;
+  reg [26:0] mask;
 
   // Manejo casos especiales (Inf*0 = NaN invalid; Inf*Inf = Inf (overflow), NaN propagate)
   always @(*) begin
@@ -57,7 +59,6 @@ module fmul(op_a, op_b, round_mode, mode_fp, result, flags);
         end
         8'h00: temp = {16'b0, {temp[31], 15'b0}};
         default: begin
-          reg [4:0] e16; reg [9:0] m16;
           e16 = (temp[30:23] > 8'd112) ? (temp[30:23] - 8'd112) : 5'd0;
           m16 = temp[22:13];
           temp = {16'b0, {temp[31], e16, m16}};
@@ -80,7 +81,7 @@ module fmul(op_a, op_b, round_mode, mode_fp, result, flags);
   reg [26:0] n_m; // 27 bits (24 mantissa + GRS)
   reg [7:0] n_e;
   reg sticky, acum_sticky;
-  integer shift_amt, shift_left, i;
+  integer shift_amt, shift_left, i, j;
 
   always @(*) begin
     prod = f_a * f_b; // 24x24 -> 48
@@ -107,10 +108,9 @@ module fmul(op_a, op_b, round_mode, mode_fp, result, flags);
       if (prod[47] == 1'b0 && prod[46] == 1'b0) begin
         // CASO 1:
         // producto en <1.0. buscar 1 msb desde bit 45
-        for (i = 45; i >= 0; i = i - 1) begin
-          if(m_to_norm[i] == 1'b1) begin
-            shift_left = 46-i; // bits a mover para q 1 llegue a pos 46
-            i = -1; // termino
+        for (i = 0; i <= 46; i = i + 1) begin
+          if(!shift_left && m_to_norm[45 - i]) begin
+            shift_left = i + 1;
           end
         end
         if (shift_left>0) begin
@@ -158,12 +158,9 @@ module fmul(op_a, op_b, round_mode, mode_fp, result, flags);
         end else begin
           // denormalizar
           // calcular sticky de todos los bits que se perderán
-          acum_sticky = 1'b0;
-          for (i = 0; i < shift_amt; i = i + 1) begin
-            acum_sticky = acum_sticky | n_m[i];
-          end
+          mask = (27'h1 << shift_amt) -1;
+          acum_sticky = |(n_m & mask);
           // Or con el stikcy original
-          acum_sticky = acum_sticky | sticky;
           // shift right
           n_m = n_m >> shift_amt;
           sticky = acum_sticky; // nuevo sticky para el redondeo
