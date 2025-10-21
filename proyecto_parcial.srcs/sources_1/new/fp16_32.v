@@ -25,7 +25,7 @@ module fp16_32(input [15:0] in16, output reg [31:0] out32);
                     frac_shifted = frac_shifted << 1;
                     shift = shift + 1;
                 end
-                exp32 = 8'd127 - 15 - shift + 1;
+                exp32 = 8'd127 - 15 - shift;
                 frac32 = {frac_shifted[8:0], 14'b0};
                 out32 = {sign, exp32, frac32};
             end
