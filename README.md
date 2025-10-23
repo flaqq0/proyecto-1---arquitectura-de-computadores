@@ -1,4 +1,5 @@
 # proyecto-1---arquitectura-de-computadores
+**EL INFORME SE ENCUENTRA EN EL ARCHIVO "INFORME P1 Arquitectura de Computadores.pdf"**
 
 Diseño e implementación de una ALU capaz de resolver operaciones en punto flotante (IEEE-754, 32 bits y 16 bits) en FPGA Basys3
 1. Resumen
